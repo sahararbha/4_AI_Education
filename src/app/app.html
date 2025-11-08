@@ -1,0 +1,729 @@
+<!-- src/app/app.html -->
+
+<div class="min-h-screen bg-slate-50 text-gray-800">
+  <!-- Header - Hidden when video is full screen -->
+  <header class="bg-white shadow-sm sticky top-0 z-50" [class.hidden]="isFullScreenVideo()">
+    <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-8 space-x-reverse">
+        <div class="flex items-center space-x-2 space-x-reverse">
+          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-9-5.747h18">
+            </path>
+            <path d="M12 21.747a9.494 9.494 0 100-18.988 9.494 9.494 0 000 18.988z"></path>
+          </svg>
+          <span class="text-xl font-bold">لوگو</span>
+        </div>
+        <nav class="hidden md:flex items-center space-x-6 space-x-reverse">
+          <a href="#" class="text-gray-600 hover:text-blue-600">دسته بندی دوره‌ها</a>
+          <a href="#" class="text-gray-600 hover:text-blue-600">مقالات</a>
+        </nav>
+      </div>
+      <div class="flex items-center space-x-4 space-x-reverse">
+        <!-- تغییر برای موبایل: نوار جستجو در ابعاد کوچک (sm) پنهان و در ابعاد متوسط (md) نمایش داده می‌شود -->
+        <div class="relative w-full md:w-64 hidden sm:block">
+          <input type="text" placeholder="جستجو"
+            class="w-full bg-gray-100 border border-gray-200 rounded-md py-2 px-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <svg class="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <div class="flex items-center space-x-2 space-x-reverse">
+          <!-- تغییر برای موبایل: دکمه جستجو برای ابعاد کوچک (sm) -->
+          <button class="p-2 rounded-full hover:bg-gray-100 sm:hidden">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-gray-100">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+              </path>
+            </svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-gray-100">
+            <svg class="w-6 h-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+            </svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-gray-100">
+            <svg class="w-6 h-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+          </button>
+          <!-- تغییر برای موبایل: دکمه منوی موبایل (hamburger) برای ابعاد کوچک -->
+          <button class="p-2 rounded-full hover:bg-gray-100 md:hidden" (click)="toggleMobileMenu()">
+              <svg class="w-6 h-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                  stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content - Hidden when video is full screen -->
+  <main class="container mx-auto px-6 py-8" [class.hidden]="isFullScreenVideo()">
+    <!-- Breadcrumbs -->
+    <nav class="text-sm text-gray-500 mb-6">
+      <ol class="list-none p-0 inline-flex">
+        @for (crumb of course().breadcrumbs; track $index; let isLast = $last) {
+        <li class="flex items-center">
+          <a href="#" class="hover:text-blue-600">{{ crumb }}</a>
+          @if (!isLast) {
+          <svg class="w-3 h-3 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <path d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z" />
+          </svg>
+          }
+        </li>
+        }
+      </ol>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Left Column: Course Details -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- DEMO/PREVIEW VIDEO STATE -->
+        <div class="bg-black aspect-video rounded-lg flex items-center justify-center text-white relative">
+          <!-- Play button: Calls the new playVideo function -->
+          <button (click)="playVideo()"
+            class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm transition-all hover:scale-105">
+            <svg class="w-10 h-10 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+          <div class="absolute bottom-4 right-4 text-xs bg-gray-900/50 px-2 py-1 rounded">دموی AI</div>
+          <div class="absolute top-4 left-4 flex space-x-2 space-x-reverse">
+            <button class="p-2 rounded-full hover:bg-white/20"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+              </svg></button>
+            <button class="p-2 rounded-full hover:bg-white/20"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg></button>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <h1 class="text-2xl font-bold mb-2">{{ course().title }}</h1>
+          <div class="flex items-center flex-wrap gap-2 mb-4">
+            <span class="text-yellow-500 flex items-center">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                </path>
+              </svg>
+              <span class="mr-1">{{ course().rating }}</span>
+            </span>
+            <span class="text-gray-500 text-sm">({{ course().reviews }} دانشجو)</span>
+            <div class="flex items-center gap-2 flex-wrap">
+              @for (tag of course().tags; track tag) {
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full" [class]="{
+                    'bg-red-100 text-red-800': tag === 'داده‌محور',
+                    'bg-purple-100 text-purple-800': tag === 'محبوب کاربران',
+                    'bg-blue-100 text-blue-800': tag === 'تخصصی',
+                    'bg-green-100 text-green-800': tag === 'گواهی‌نامه'
+                  }">
+                {{ tag }}
+              </span>
+              }
+            </div>
+          </div>
+          <p class="text-gray-600 leading-relaxed">{{ course().description }} <a href="#"
+              class="text-blue-600 font-semibold">بیشتر</a></p>
+        </div>
+
+        <!-- Course Content Tabs -->
+        <div class="bg-white rounded-lg shadow-sm">
+          <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-6 space-x-reverse px-6">
+              <button (click)="selectTab('content')"
+                [class]="activeTab() === 'content' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">محتوای دوره</button>
+              <button (click)="selectTab('prereqs')"
+                [class]="activeTab() === 'prereqs' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">پیش نیازها</button>
+              <button (click)="selectTab('faq')"
+                [class]="activeTab() === 'faq' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">سوالات متداول</button>
+              <button (click)="selectTab('reviews')"
+                [class]="activeTab() === 'reviews' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">نظرات کاربران</button>
+            </nav>
+          </div>
+          <div class="p-6">
+            @if (activeTab() === 'content') {
+            <div>
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold">عناوین دوره</h3>
+                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+              </div>
+              <ul class="space-y-3 mb-6 text-gray-600">
+                @for (benefit of course().benefits; track benefit) {
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-green-500 mr-2 shrink-0 mt-1" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>{{ benefit }}</span>
+                </li>
+                }
+              </ul>
+
+              <div class="bg-blue-50 border-r-4 border-blue-500 p-4 rounded-md mb-8">
+                <div class="flex">
+                  <div class="shrink-0">
+                    <svg class="w-6 h-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                      fill="currentColor">
+                      <path
+                        d="M14.473 21.033a.75.75 0 0 1-1.043.933A9.75 9.75 0 0 1 3 12.75a.75.75 0 0 1 .75-.75h2.115a.75.75 0 0 1 .744.643A7.251 7.251 0 0 0 12.75 21a.75.75 0 0 1-.527.707l-1.073.477a.75.75 0 0 0 .323.849ZM12 6.75a5.25 5.25 0 1 0 0 10.5 5.25 5.25 0 0 0 0-10.5ZM12 15.75a3.75 3.75 0 1 1 0-7.5 3.75 3.75 0 0 1 0 7.5Z" />
+                      <path
+                        d="M21.75 12.75a.75.75 0 0 0-.75-.75h-2.115a.75.75 0 0 0-.744.643A7.251 7.251 0 0 1 11.25 21a.75.75 0 0 0 .527.707l1.073.477a.75.75 0 0 1-.323.849 1.05 1.05 0 0 0 1.043.933A9.75 9.75 0 0 0 21.75 12.75Z" />
+                    </svg>
+                  </div>
+                  <div class="mr-3">
+                    <h4 class="font-bold text-blue-800">مشاوره AI</h4>
+                    <p class="text-sm text-blue-700">در این پلتفرم آموزشی مبتنی بر هوش مصنوعی، یادگیری به تجربه‌ای
+                      تعاملی و هوشمند تبدیل شده است. کاربران می‌توانند در هنگام تماشای هر ویدیو آموزشی، به‌صورت متنی یا
+                      صوتی با «مشاور AI» گفتگو کنند.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold">لیست جلسات</h3>
+                <svg class="w-6 h-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                  stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              </div>
+
+              <div class="space-y-2">
+                @for(section of course().sections; track $index; let i = $index) {
+                <div class="border border-gray-200 rounded-lg">
+                  <button (click)="toggleSection(i)"
+                    class="w-full flex justify-between items-center p-4 text-right bg-gray-50 hover:bg-gray-100">
+                    <div class="flex items-center">
+                      <span class="text-blue-500 font-bold ml-3">{{ section.title }}</span>
+                      <span class="text-xs text-gray-500">{{ section.lessonCount }} قسمت - {{ section.totalDuration
+                        }}</span>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-500 transform transition-transform"
+                      [class]="expandedSection() === i ? '-rotate-180' : ''" fill="none" stroke="currentColor"
+                      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </button>
+                  @if (expandedSection() === i) {
+                  <div class="p-4 border-t border-gray-200">
+                    <ul class="space-y-3">
+                      @for(lesson of section.lessons; track lesson.title) {
+                      <li class="flex justify-between items-center text-gray-700">
+                        <div class="flex items-center">
+                          <svg class="w-6 h-6 text-gray-400 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                          <span>{{ lesson.title }}</span>
+                        </div>
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                          @if (lesson.isFree) {
+                          <span
+                            class="text-xs text-blue-600 font-semibold px-2 py-0.5 border border-blue-300 bg-blue-50 rounded-md">رایگان</span>
+                          }
+                          <span class="text-sm text-gray-500">{{ lesson.duration }}</span>
+                          <button class="text-gray-400 hover:text-blue-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </li>
+                      }
+                    </ul>
+                  </div>
+                  }
+                </div>
+                }
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Purchase Card -->
+      <div class="lg:col-span-1">
+        <div class="bg-white p-5 rounded-lg shadow-sm sticky top-24 space-y-4">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center">
+              <svg class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 p-2 ml-3" xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
+              <div>
+                <div class="text-sm text-gray-500">نام مدرس</div>
+                <div class="font-semibold">{{ course().instructor.price }}</div>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2 space-x-reverse">
+              <button class="p-2 rounded-lg border border-gray-300 hover:bg-gray-100">
+                <svg class="w-6 h-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                  stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+              </button>
+              <button class="p-2 rounded-lg border border-gray-300 hover:bg-gray-100">
+                <svg class="w-6 h-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                  stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.5 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-center text-sm">
+            <div class="border rounded-lg p-3 flex items-center justify-center">
+              <svg class="w-5 h-5 text-gray-500 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0h18M-7.5 12h1.5" />
+              </svg>
+              <div>
+                <div class="text-gray-500">آخرین بروزرسانی</div>
+                <div class="font-semibold">{{ course().lastUpdate | date:'shortDate' }}</div>
+              </div>
+            </div>
+            <div class="border rounded-lg p-3 flex items-center justify-center">
+              <svg class="w-5 h-5 text-gray-500 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              <div>
+                <div class="text-gray-500">مدت زمان دوره</div>
+                <div class="font-semibold">{{ course().duration }}</div>
+              </div>
+            </div>
+            <div class="border rounded-lg p-3 flex items-center justify-center">
+              <svg class="w-5 h-5 text-gray-500 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+              <div>
+                <div class="text-gray-500">وضعیت دوره</div>
+                <div class="font-semibold">{{ course().status }}</div>
+              </div>
+            </div>
+            <div class="border rounded-lg p-3 flex items-center justify-center">
+              <svg class="w-5 h-5 text-gray-500 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.57 50.57 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+              </svg>
+              <div>
+                <div class="text-gray-500">پیش نیاز</div>
+                <div class="font-semibold">{{ course().prerequisites }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <div class="flex justify-between items-center text-sm mb-2">
+              <span class="text-gray-500">قیمت:</span>
+              <span class="text-red-500 line-through">{{ course().originalPrice }}</span>
+            </div>
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-green-600 font-bold text-2xl">{{ course().price }}</span>
+              <span class="bg-red-100 text-red-700 text-sm font-semibold px-3 py-1 rounded-full">ذخیره</span>
+            </div>
+            <button
+              class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">افزودن
+              به سبد خرید</button>
+          </div>
+
+          <div class="pt-2">
+            <div class="flex justify-between text-sm mb-1">
+              <span>درصد تکمیل دوره</span>
+              <span>{{ course().progress }}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div class="bg-blue-500 h-2.5 rounded-full" [style.width.%]="course().progress"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-center text-sm pt-2">
+            <div class="flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-500 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+              </svg>
+              <span>{{ course().chapters }} فصل {{ course().quizzes }} آزمون</span>
+            </div>
+            <div class="flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-500 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
+              </svg>
+              <span>پشتیبانی دائمی</span>
+            </div>
+          </div>
+
+          <div class="border-t pt-4">
+            <div
+              class="flex items-center justify-between bg-blue-50 border border-dashed border-blue-400 p-3 rounded-lg">
+              <span class="text-blue-600 font-mono text-sm">{{ course().shareLink }}</span>
+              <button class="text-blue-500 hover:text-blue-700">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                  stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375-3.375-3.375M15 12h-7.5" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FULL SCREEN VIDEO PLAYER -->
+  @if (isFullScreenVideo()) {
+  <!-- طرح‌بندی سه ستونی (70% وایت‌بورد+آواتار | 15% لیست بخش‌ها | 15% چت) -->
+  <!-- تغییر برای موبایل: در ابعاد کوچک به صورت عمودی (flex-col) نمایش داده می‌شود -->
+  <div id="full-screen-player" class="fixed inset-0 z-[100] flex flex-col lg:rtl:flex-row-reverse bg-gray-900">
+    
+    <!-- Video Player & Whiteboard Area (Takes 70% width on large screens, full width on mobile) -->
+    <div class="w-full lg:flex-1 lg:max-w-[70%] bg-black relative flex flex-col">
+        
+        <!-- Top Section: Whiteboard + Avatar -->
+        <!-- در دسکتاپ (lg) به صورت افقی split می‌شود، در موبایل (default) فقط آواتار وجود دارد. -->
+        <div class="flex-grow w-full flex relative lg:flex-row flex-col">
+
+            <!-- **جابجایی ۱:** کانتینر آواتار/Three.js (سمت راست در دسکتاپ، تمام عرض در موبایل) -->
+            <!-- در دسکتاپ: w-1/2 | در موبایل: w-full با aspect-video برای بزرگتر شدن -->
+            <div #threeContainer class="w-full lg:w-1/2 h-full relative aspect-video lg:aspect-auto">
+                <!-- Canvas Three.js در اینجا رندر می‌شود -->
+                
+                <!-- AVATAR and MICROPHONE (Interactive Elements) -->
+                <div class="absolute top-4 right-4 z-10 flex space-x-2 space-x-reverse">
+                    <!-- Microphone/Pause/Resume/Next Button: Calls togglePlayback() -->
+                    <button (click)="togglePlayback()"
+                        title="{{ isAudioPlaying() ? 'مکث صدا و شروع پرسش صوتی' : (isPlayerReadyAndStopped() ? 'ادامه پخش' : 'بخش بعدی') }}"
+                        [class.bg-yellow-600]="isAudioPlaying()" [class.bg-green-600]="!isAudioPlaying()"
+                        class="w-16 h-16 rounded-full border-4 border-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-105 transition-transform p-3">
+
+                        @if (isAudioPlaying()) {
+                        <!-- آیکون مکث (Pause) در حالت پخش -->
+                        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M6 5.5a1.5 1.5 0 0 1 3 0v13a1.5 1.5 0 0 1-3 0v-13Zm9 0a1.5 1.5 0 0 1 3 0v13a1.5 1.5 0 0 1-3 0v-13Z" />
+                        </svg>
+                        } @else if (isPlayerReadyAndStopped()) {
+                        <!-- آیکون Play/Resume در حالت مکث (برای ادامه از همان جا) -->
+                        <svg class="w-8 h-8 ml-1 text-white" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        } @else {
+                        <!-- آیکون Next/Forward در حالت توقف (برای پخش بخش بعدی) -->
+                        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M15.545 10.395 12 14.887V7.113l3.545 3.282ZM3 19V5a1 1 0 0 1 1-1h13.5a1 1 0 0 1 .802.403L21 9v6l-2.698 4.597A1 1 0 0 1 17.5 20H4a1 1 0 0 1-1-1Z" />
+                        </svg>
+                        }
+                    </button>
+
+                    <!-- AI Avatar (Existing) -->
+                    <div
+                        class="w-16 h-16 rounded-full bg-blue-600 border-4 border-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-105 transition-transform"
+                        title="مشاور AI">
+                        <svg class="w-10 h-10 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M14.473 21.033a.75.75 0 0 1-1.043.933A9.75 9.75 0 0 1 3 12.75a.75.75 0 0 1 .75-.75h2.115a.75.75 0 0 1 .744.643A7.251 7.251 0 0 0 12.75 21a.75.75 0 0 1-.527.707l-1.073.477a.75.75 0 0 0 .323.849ZM12 6.75a5.25 5.25 0 1 0 0 10.5 5.25 5.25 0 0 0 0-10.5ZM12 15.75a3.75 3.75 0 1 1 0-7.5 3.75 3.75 0 0 1 0 7.5Z" />
+                            <path
+                                d="M21.75 12.75a.75.75 0 0 0-.75-.75h-2.115a.75.75 0 0 0-.744.643A7.251 7.251 0 0 1 11.25 21a.75.75 0 0 0 .527.707l1.073.477a.75.75 0 0 1-.323.849 1.05 1.05 0 0 0 1.043.933A9.75 9.75 0 0 0 21.75 12.75Z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Close Button: Calls the new closeVideo function -->
+                <button (click)="closeVideo()"
+                    class="absolute top-4 left-4 p-2 rounded-full bg-white/20 text-white hover:bg-white/40 z-10">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- **جابجایی ۲:** وایت‌بورد (فقط دسکتاپ - ۵۰٪ از ۷۰٪) -->
+            <div class="w-1/2 flex items-center justify-center p-8 hidden lg:flex" style="background-color: #93C5FD;">
+                <div class="bg-white p-6 rounded-lg shadow-2xl max-w-xl w-full h-96 overflow-y-auto">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 border-b pb-2">مفهوم درس (تخته هوشمند)</h3>
+                    <!-- نمایش متن بخش فعلی درس -->
+                    <p class="text-gray-700 leading-loose whitespace-pre-line">{{ getCurrentLessonChunkText() }}</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom Section: Video Controls/Progress Bar -->
+        <div class="flex-shrink-0 p-4 bg-black/50 text-white">
+            <input type="range" 
+                   [min]="0" 
+                   [max]="duration()" 
+                   [value]="currentTime()" 
+                   (input)="seekTo($event)"
+                   class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer range-lg accent-red-600">
+            <div class="flex justify-between text-sm mt-2">
+                <span>{{ formatTime(currentTime()) }} / {{ formatTime(duration()) }}</span>
+                <span>فول اسکرین، کیفیت، صدا</span>
+            </div>
+        </div>
+
+        <!-- عنوان درس در بالای بخش 70% -->
+        <div class="absolute top-0 w-full p-4 text-center bg-black/50 text-white">
+            <span class="text-xl font-bold">ویدیوی درس: {{ course().title }}</span>
+        </div>
+
+    </div>
+    
+    <!-- Lesson Chunks List (Takes 15% width) -->
+    <!-- در موبایل پنهان می‌شود (hidden lg:flex) -->
+    <div class="w-full max-w-[15%] bg-gray-800 flex-col overflow-hidden hidden lg:flex">
+        <div class="p-4 border-b border-gray-700 flex-shrink-0">
+            <h4 class="font-bold text-white">لیست بخش‌های درس</h4>
+            <p class="text-xs text-gray-400">برای پخش مجدد، کلیک کنید.</p>
+        </div>
+        <div class="flex-1 p-3 overflow-y-auto space-y-2 text-sm">
+            <!-- Loop through lesson chunks -->
+            @for (chunk of getLessonChunks(); track $index; let i = $index) {
+            <div 
+                (click)="playSpecificChunk(i)"
+                class="flex items-start p-2 rounded-lg cursor-pointer transition-colors"
+                [class.bg-blue-600]="i === currentChunkIndex()"
+                [class.text-white]="i === currentChunkIndex()"
+                [class.bg-gray-700]="i !== currentChunkIndex()"
+                [class.text-gray-300]="i !== currentChunkIndex()"
+                [class.hover:bg-gray-600]="i !== currentChunkIndex()"
+            >
+                <span class="chunk-index font-semibold ml-2">{{ i + 1 }}.</span>
+                <!-- فقط 80 کاراکتر اول از هر بخش را نمایش می‌دهد -->
+                <span class="chunk-title overflow-hidden whitespace-nowrap overflow-ellipsis">{{ chunk | slice:0:80 }}...</span>
+                <span *ngIf="i === currentChunkIndex()" class="playing-indicator mr-auto text-yellow-300">▶️</span>
+            </div>
+            }
+        </div>
+    </div>
+
+
+    <!-- AI Chat Panel (Takes 15% width) -->
+    <!-- در موبایل پنهان می‌شود (hidden lg:flex) -->
+    <div class="w-full max-w-[15%] bg-white border-r border-gray-200 flex-col hidden lg:flex">
+        <div class="p-4 border-b bg-blue-50 flex-shrink-0">
+            <h4 class="font-bold text-blue-800">مشاور AI (گفتگو)</h4>
+            <p class="text-xs text-blue-700">در حین تماشای دوره، سوالات خود را بپرسید.</p>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div class="flex-1 p-4 overflow-y-auto space-y-4">
+            <!-- Loop through chat history -->
+            @for (message of chatHistory(); track $index) {
+            @if (message.sender === 'user') {
+            <div class="flex flex-col items-end">
+                <div class="bg-blue-500 text-white p-2 rounded-xl rounded-tr-none max-w-xs text-sm">{{ message.message }}
+                </div>
+                <!-- Note: The 'date' pipe requires CommonModule to be imported in the Angular module -->
+                <span class="text-xs text-gray-500 mt-1">شما، {{ message.timestamp | date:'shortTime' }}</span>
+            </div>
+            } @else {
+            <div class="flex flex-col items-start">
+                <div class="bg-gray-100 text-gray-800 p-2 rounded-xl rounded-tl-none max-w-xs text-sm">{{ message.message }}
+                </div>
+                <span class="text-xs text-blue-500 mt-1">مشاور AI، {{ message.timestamp | date:'shortTime' }}</span>
+            </div>
+            }
+            }
+        </div>
+
+        <!-- Chat Input (Connected to sendMessage) -->
+        <div class="p-4 border-t border-gray-200 flex-shrink-0">
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <!-- دکمه جدید میکروفون -->
+                <button (click)="toggleVoiceRecording()"
+                    [class.bg-red-600]="isRecording()" [class.bg-gray-400]="!isRecording()"
+                    class="p-2 rounded-full text-white hover:opacity-80 transition-colors"
+                    title="{{ isRecording() ? 'پایان ضبط و ارسال' : 'شروع ضبط صوتی' }}">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        @if (isRecording()) {
+                        <!-- آیکون مربع (Stop) در حالت ضبط -->
+                        <path d="M5 5h14v14H5z" />
+                        } @else {
+                        <!-- آیکون میکروفون (Record) در حالت عادی -->
+                        <path
+                            d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c0 3.53-2.94 6.41-6.5 6.41S5.41 14.53 5.41 11H4c0 4.17 3.13 7.6 7 8.16V22h2v-2.84c3.87-.56 7-3.99 7-8.16h-1.09z" />
+                        }
+                    </svg>
+                </button>
+
+                <!-- Text Input: Uses [value] and (input) for setting the signal value and (keyup.enter) for sending -->
+                <input type="text" [value]="currentChatInput()" (input)="currentChatInput.set($event.target.value)"
+                    (keyup.enter)="sendMessage()" placeholder="پیام خود را تایپ کنید..."
+                    class="flex-1 border border-gray-300 rounded-lg py-2 px-3 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    [disabled]="isRecording()"> <!-- غیرفعال کردن ورودی متنی در حین ضبط -->
+
+                <!-- Send Button -->
+                <button (click)="sendMessage()" [disabled]="!currentChatInput().trim() || isRecording()"
+                    class="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 disabled:bg-gray-400">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- تغییر برای موبایل: بخش تب‌ها برای ابعاد کوچک (Whiteboard / Lesson Chunks / AI Chat) -->
+    <div class="lg:hidden w-full bg-white text-gray-800 flex-shrink-0 border-t border-gray-200">
+        <!-- Tabs Nav -->
+        <div class="border-b border-gray-200">
+            <nav class="-mb-px flex justify-around space-x-reverse px-2">
+                <!-- تغییر: ترتیب به مشاور AI، جلسات، تخته هوشمند -->
+                <button (click)="setActiveMobileTab('chat')"
+                    [class]="activeMobileTab() === 'chat' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                    class="whitespace-nowrap flex-1 py-3 px-1 border-b-2 font-medium text-sm text-center">مشاور AI</button>
+                <button (click)="setActiveMobileTab('chunks')"
+                    [class]="activeMobileTab() === 'chunks' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                    class="whitespace-nowrap flex-1 py-3 px-1 border-b-2 font-medium text-sm text-center">جلسات</button>
+                <button (click)="setActiveMobileTab('whiteboard')"
+                    [class]="activeMobileTab() === 'whiteboard' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                    class="whitespace-nowrap flex-1 py-3 px-1 border-b-2 font-medium text-sm text-center">تخته هوشمند</button>
+            </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <!-- تغییر اندازه ویدیو در حالت گوشی: ارتفاع محتوای تب از h-[40vh] کاهش می‌یابد. -->
+        <div class="h-[40vh] overflow-y-auto">
+            @if (activeMobileTab() === 'whiteboard') {
+                <!-- Whiteboard Content -->
+                <div class="p-4 bg-white h-full">
+                    <div class="bg-white p-2 rounded-lg shadow-inner w-full h-full overflow-y-auto border border-blue-100">
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 border-b pb-2">مفهوم درس</h3>
+                        <p class="text-gray-700 leading-loose whitespace-pre-line text-sm">{{ getCurrentLessonChunkText() }}</p>
+                    </div>
+                </div>
+            } @else if (activeMobileTab() === 'chunks') {
+                <!-- Lesson Chunks Content -->
+                <div class="p-3 overflow-y-auto space-y-2 text-sm bg-gray-50 h-full">
+                    @for (chunk of getLessonChunks(); track $index; let i = $index) {
+                    <div 
+                        (click)="playSpecificChunk(i)"
+                        class="flex items-start p-2 rounded-lg cursor-pointer transition-colors border"
+                        [class.bg-blue-100]="i === currentChunkIndex()"
+                        [class.text-blue-800]="i === currentChunkIndex()"
+                        [class.bg-white]="i !== currentChunkIndex()"
+                        [class.text-gray-700]="i !== currentChunkIndex()"
+                        [class.hover:bg-gray-100]="i !== currentChunkIndex()"
+                    >
+                        <span class="chunk-index font-semibold ml-2">{{ i + 1 }}.</span>
+                        <span class="chunk-title flex-1 overflow-hidden whitespace-nowrap overflow-ellipsis">{{ chunk | slice:0:80 }}...</span>
+                        @if (i === currentChunkIndex()) {
+                            <span class="playing-indicator mr-auto text-yellow-600">▶️</span>
+                        }
+                    </div>
+                    }
+                </div>
+            } @else if (activeMobileTab() === 'chat') {
+                <!-- AI Chat Content -->
+                <div class="flex flex-col h-full bg-white">
+                    <!-- Chat Messages Area -->
+                    <div class="flex-1 p-4 overflow-y-auto space-y-4">
+                        @for (message of chatHistory(); track $index) {
+                        @if (message.sender === 'user') {
+                        <div class="flex flex-col items-end">
+                            <div class="bg-blue-500 text-white p-2 rounded-xl rounded-tr-none max-w-xs text-sm">{{ message.message }}
+                            </div>
+                            <span class="text-xs text-gray-500 mt-1">شما، {{ message.timestamp | date:'shortTime' }}</span>
+                        </div>
+                        } @else {
+                        <div class="flex flex-col items-start">
+                            <div class="bg-gray-100 text-gray-800 p-2 rounded-xl rounded-tl-none max-w-xs text-sm">{{ message.message }}
+                            </div>
+                            <span class="text-xs text-blue-500 mt-1">مشاور AI، {{ message.timestamp | date:'shortTime' }}</span>
+                        </div>
+                        }
+                        }
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="p-4 border-t border-gray-200 flex-shrink-0">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <button (click)="toggleVoiceRecording()"
+                                [class.bg-red-600]="isRecording()" [class.bg-gray-400]="!isRecording()"
+                                class="p-2 rounded-full text-white hover:opacity-80 transition-colors"
+                                title="{{ isRecording() ? 'پایان ضبط و ارسال' : 'شروع ضبط صوتی' }}">
+                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    @if (isRecording()) {
+                                    <path d="M5 5h14v14H5z" />
+                                    } @else {
+                                    <path
+                                        d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c0 3.53-2.94 6.41-6.5 6.41S5.41 14.53 5.41 11H4c0 4.17 3.13 7.6 7 8.16V22h2v-2.84c3.87-.56 7-3.99 7-8.16h-1.09z" />
+                                    }
+                                </svg>
+                            </button>
+                            <input type="text" [value]="currentChatInput()" (input)="currentChatInput.set($event.target.value)"
+                                (keyup.enter)="sendMessage()" placeholder="پیام خود را تایپ کنید..."
+                                class="flex-1 border border-gray-300 rounded-lg py-2 px-3 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                [disabled]="isRecording()">
+                            <button (click)="sendMessage()" [disabled]="!currentChatInput().trim() || isRecording()"
+                                class="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 disabled:bg-gray-400">
+                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+  </div>
+  }
+</div>
