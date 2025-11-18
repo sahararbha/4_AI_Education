@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست تولید صدای فارسی</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            color: #4a4a4a;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            font-size: 16px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        button:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #666;
+            min-height: 25px;
+        }
+        #audio-player-container {
+            margin-top: 20px;
+        }
+        audio {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تست تولید صدای فارسی با Gemini</h1>
+        <textarea id="text-input" rows="4" placeholder="متن خود را برای خوانده شدن اینجا وارد کنید..."></textarea>
+        <button id="submit-btn" onclick="requestTts()">تولید صدا</button>
+        <div id="status"></div>
+        <div id="audio-player-container"></div>
+    </div>
+
+    <script>
+        const textInput = document.getElementById('text-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const statusDiv = document.getElementById('status');
+        const audioContainer = document.getElementById('audio-player-container');
+
+        async function requestTts() {
+            const text = textInput.value.trim();
+            if (!text) {
+                alert('لطفاً متنی را وارد کنید.');
+                return;
+            }
+
+            // غیرفعال کردن دکمه و نمایش پیام در حال پردازش
+            submitBtn.disabled = true;
+            statusDiv.textContent = 'در حال ارسال درخواست به سرور...';
+            audioContainer.innerHTML = '';
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/gemini-tts-start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text_to_read: text }),
+                });
+
+                statusDiv.textContent = 'در حال دریافت پاسخ از سرور...';
+
+                if (!response.ok) {
+                    throw new Error(`خطای شبکه: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.tts_url) {
+                    // ساخت URL کامل برای فایل صوتی
+                    const audioUrl = `http://127.0.0.1:5000${data.tts_url}`;
+                    
+                    statusDiv.textContent = 'صدا با موفقیت تولید شد!';
+                    
+                    // ایجاد پخش‌کننده صدا و نمایش آن
+                    const audioPlayer = document.createElement('audio');
+                    audioPlayer.controls = true;
+                    audioPlayer.src = audioUrl;
+                    audioContainer.appendChild(audioPlayer);
+                    audioPlayer.play(); // پخش خودکار صدا
+                } else {
+                    throw new Error('پاسخ سرور شامل tts_url نبود.');
+                }
+
+            } catch (error) {
+                console.error('خطا:', error);
+                statusDiv.textContent = `خطا در ارتباط با سرور: ${error.message}`;
+            } finally {
+                // فعال کردن مجدد دکمه
+                submitBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
