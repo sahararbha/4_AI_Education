@@ -1,0 +1,43 @@
+postgres
+python -X utf8 app\chatbot_insert_user.py
+python app\chatbot_insert_user.py
+python -X utf8 app\chatbot_select.py
+python app\chatbot_select.py
+docker-compose up -d
+
+
+-- ویرایش اطلاعات کاربر با شناسه 2
+UPDATE Users
+SET
+    first_name = 'زهرا',
+    last_name = 'صادقی',
+    email = 'zahra.sadeghi@newdomain.com'
+WHERE
+    user_id = 2;
+
+
+
+
+-- این دستور ستون created_by_user_id را برای هر درس برابر با شناسه همان درس قرار می‌دهد
+UPDATE Courses
+SET created_by_user_id = course_id
+WHERE course_id IN (1, 2, 3, 4, 5);
+
+
+
+UPDATE Users
+SET
+    first_name = 'سارا',
+    last_name = 'عبدی'
+WHERE
+    user_id = 6;
+
+
+INSERT INTO public.courses (course_id, title, description, pdf_file_path, created_at,created_by_user_id) VALUES
+(7, 'جاوا', 'دوره جاوا...', '/path/to/pdfs/java.pdf', NOW(),7),
+(8, 'پایتون پیشرفته', 'پایتون برای داده‌کاوی...', '/path/to/pdfs/advanced_python.pdf', NOW(),8),
+(9, 'طراحی UI/UX', 'ابزارهای فیگما و ادوبی...', '/path/to/pdfs/ui_ux_design.pdf', NOW(),9);
+
+
+
+
